@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 19:54:05 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/05/06 16:59:03 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/05/17 17:56:29 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,13 @@ void	check_first_last_wall(t_pars *g, int n)
 	}
 }
 
+void	len_check(t_pars *g, int i)
+{
+	if (i >= (int)ft_strlen(g->rgb[g->l - 1])
+		|| i >= (int)ft_strlen(g->rgb[g->l + 1]))
+		write_error("Map invalid middle");
+}
+
 void	check_middle(t_pars *g)
 {
 	int	len;
@@ -140,16 +147,17 @@ void	check_middle(t_pars *g)
 			write_error("Left or right wall broken");
 		while (++i < len)
 		{
-			if (g->rgb[g->l][i] == '0'
-			|| g->rgb[g->l][i] == 'E'
-			|| g->rgb[g->l][i] == 'W'
-			|| g->rgb[g->l][i] == 'N'
-			|| g->rgb[g->l][i] == 'S')
+			if (g->rgb[g->l][i] == '0' || g->rgb[g->l][i] == 'E'
+				|| g->rgb[g->l][i] == 'W' || g->rgb[g->l][i] == 'N'
+				|| g->rgb[g->l][i] == 'S')
+			{
+				len_check(g, i);
 				if (g->rgb[g->l - 1][i] == 32
 				|| g->rgb[g->l + 1][i] == 32
 				|| g->rgb[g->l][i - 1] == 32
 				|| g->rgb[g->l][i + 1] == 32)
 					write_error("Map invalid middle");
+			}
 		}
 		g->l++;
 	}
@@ -223,6 +231,5 @@ int main(int ac, char **av)
 		write_error("Wrong map path");
 	loopars(&g);
 	mapars(&g);
-	printf("done getting lines\n");
 	manage_window(&g);
 }

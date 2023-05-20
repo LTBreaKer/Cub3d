@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 20:16:03 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/05/11 08:55:54 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/05/20 01:11:29 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@
 # include "../minilibx_opengl_20191021/mlx.h"
 # include <errno.h>
 # include <fcntl.h>
+# include <float.h>
+# include <limits.h>
 # include <math.h>
+# include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
@@ -24,7 +27,8 @@
 
 # define WIN_WIDTH 1280
 # define WIN_HEIGHT 720
-# define TILE_SIZE 32
+# define TILE_SIZE 60
+# define MAP_SCALE 6
 # define W_KEY 13
 # define A_KEY 0
 # define S_KEY 1
@@ -37,16 +41,27 @@
 # define RELEASED 0
 # define LEFT -1
 # define RIGHT 1
-# define RAYS (1280 / 25)
-# define FOV (60 * (M_PI / 180))
+# define RAYS ((1280 / 2))
+# define FOV (70 * (M_PI / 180))
 
 typedef struct s_rays
 {
 	double	ray_angle[RAYS];
-	double	wall_hit_x;
-	double	wall_hit_y;
-	double	distance;
+	double	distance[RAYS];
+	double	wall_hit_x[RAYS];
+	double	wall_hit_y[RAYS];
+	bool	facing_down;
+	bool	facing_up;
+	bool	facing_left;
+	bool	facing_right;
 }			t_rays;
+
+typedef struct s_wall
+{
+	double	distprojplane;
+	double	rect_width;
+	double	wall_height;
+}			t_wall;
 
 typedef struct s_coords
 {
@@ -72,13 +87,15 @@ typedef struct s_keys
 	int		d;
 	int		left;
 	int		right;
+	int		mouse_x;
+	int		old_mouse_x;
 }			t_keys;
 
 typedef struct s_map
 {
 	char	**map;
-	int		wall_color;
 	int		floor_color;
+	int		ceiling_color;
 
 }			t_map;
 
@@ -86,10 +103,16 @@ typedef struct s_mlx
 {
 	void	*mlx_ptr;
 	void	*win_ptr;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+	void	*img;
 	t_p		p;
 	t_keys	keys;
 	t_map	map;
 	t_rays	rays;
+	t_wall	wall;
 }			t_mlx;
 
 typedef struct s_pars
@@ -121,9 +144,15 @@ void		loopars(t_pars *g);
 
 //--------------------window.c--------------------
 
+void		ft_mlx_pixel_put(t_mlx *mlx, int x, int y, int color);
 void		draw_point(t_mlx *ptr, t_coords coords, int size, int color);
 void		draw_circle(t_mlx *mlx, t_coords coords, int radius, int color);
-void		draw_line(t_mlx *mlx, t_coords coords, double angle, int color);
+void		draw_line(t_mlx *mlx, int i);
 int			wall_check(double new_x, double new_y, char **map);
 void		manage_window(t_pars *g);
+void		draw_player(t_mlx *ptr, t_coords coords, int size, int color);
+void		draw_direc(t_mlx *mlx);
+void		draw_ceiling(t_mlx *mlx, t_coords coords);
+void		draw_wall(t_mlx *mlx, t_coords coords);
+void		draw_floor(t_mlx *mlx, t_coords coords);
 #endif

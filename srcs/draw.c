@@ -6,11 +6,19 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 15:46:36 by aharrass          #+#    #+#             */
-/*   Updated: 2023/05/11 08:58:39 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/05/19 16:42:29 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
+
+void	ft_mlx_pixel_put(t_mlx *mlx, int x, int y, int color)
+{
+	char	*dst;
+
+	dst = mlx->addr + (y * mlx->line_length + x * (mlx->bits_per_pixel / 8));
+	*(unsigned int *)dst = color;
+}
 
 void	draw_point(t_mlx *ptr, t_coords coords, int size, int color)
 {
@@ -23,37 +31,52 @@ void	draw_point(t_mlx *ptr, t_coords coords, int size, int color)
 		j = 0;
 		while (j < size)
 		{
-			mlx_pixel_put(ptr->mlx_ptr, ptr->win_ptr, coords.x + i, coords.y + j, color);
+			ft_mlx_pixel_put(ptr, coords.x + i, coords.y + j, color);
+			j++;
+		}
+		i++;
+	}
+}
+void	draw_player(t_mlx *ptr, t_coords coords, int size, int color)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < size)
+	{
+		j = 0;
+		while (j < size)
+		{
+			ft_mlx_pixel_put(ptr, coords.x - size / 2 + i, coords.y - size / 2 + j, color);
 			j++;
 		}
 		i++;
 	}
 }
 
-void	draw_circle(t_mlx *mlx, t_coords coords, int radius, int color)
+void	draw_line(t_mlx *mlx, int i)
 {
-	double i;
+	double	size;
 
-	i = 0;
-	while (i < 360)
+	size = 0;
+	while (size < mlx->rays.distance[i])
 	{
-		mlx_pixel_put(mlx->mlx_ptr, mlx->win_ptr, coords.x + radius * cos(i), coords.y
-				+ radius * sin(i), color);
-		i += 0.1;
+		ft_mlx_pixel_put(mlx, mlx->p.x + size * cos(mlx->rays.ray_angle[i])
+			, mlx->p.y + size * sin(mlx->rays.ray_angle[i]), 0x0703c6);
+		size += 0.1;
 	}
 }
 
-void	draw_line(t_mlx *mlx, t_coords coords, double angle, int color)
+void	draw_direc(t_mlx *mlx)
 {
-	double	i;
-	double	j;
+	double	size;
 
-	i = 0;
-	j = 0;
-	while (i < 500)
+	size = 0;
+	while (size < TILE_SIZE / MAP_SCALE)
 	{
-		mlx_pixel_put(mlx->mlx_ptr, mlx->win_ptr, coords.x + i * cos(angle), coords.y
-				+ i * sin(angle), color);
-		i += 0.1;
+		ft_mlx_pixel_put(mlx, mlx->p.x / MAP_SCALE + size * cos(mlx->p.angle)
+		, mlx->p.y / MAP_SCALE + size * sin(mlx->p.angle), 0x0703c6);
+		size += 0.1;
 	}
 }

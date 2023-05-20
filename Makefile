@@ -1,6 +1,6 @@
 NAME = cub3d
 
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=address -g
 
 RM = rm -f
 
@@ -21,6 +21,7 @@ SR =	main.c \
 			get_next_line.c \
 			get_next_line_utils.c \
 			draw.c \
+			draw2.c \
 			window.c \
 		
 SRC = $(addprefix $(SR_PATH), $(SR))
