@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 19:54:05 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/05/17 17:56:29 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/05/30 00:30:20 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	write_error(char *str)
 	ft_putendl_fd("Error", 2);
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd("\n", 2);
-	exit (1);
+	exit(1);
 }
 
 void	check_ext(char *str)
@@ -25,14 +25,12 @@ void	check_ext(char *str)
 	int	len;
 
 	len = ft_strlen(str);
-	if (len <= 4 || (str[len - 1] != 'b'
-		|| str[len - 2] != 'u'
-		|| str[len - 3] != 'c'
-		|| str[len - 4] != '.'))
+	if (len <= 4 || (str[len - 1] != 'b' || str[len - 2] != 'u' || str[len
+				- 3] != 'c' || str[len - 4] != '.'))
 	{
 		ft_putendl_fd("Error", 2);
 		ft_putstr_fd("Not valid extension\n", 2);
-		exit (1);
+		exit(1);
 	}
 }
 
@@ -43,16 +41,16 @@ void	loopars(t_pars *g)
 	while (1)
 	{
 		if (g->l == 6)
-			break;
+			break ;
 		g->line = get_next_line(g->fd);
 		if (!g->line)
-			break;
+			break ;
 		j = valid_line(g);
 		if (j == -1)
 			write_error("Not a valid identifier");
 		free(g->line);
 		if (j == -2)
-			continue;
+			continue ;
 		if (j >= 0 || j <= 5)
 			g->hash[j] = 'd';
 	}
@@ -72,7 +70,7 @@ void	g_init(t_pars *g)
 	g->l1 = 0;
 	g->f = 0;
 	g->c = 0;
-	g->hash = malloc (7);
+	g->hash = malloc(7);
 	g->hash[6] = '\0';
 	while (i++ < 6)
 		g->hash[i] = 'x';
@@ -92,7 +90,7 @@ int	this_line(char *s)
 		while (s[i])
 		{
 			if (s[i] != '1' && s[i] != 32)
-				write_error ("Up or down invalid wall"); // dont forget to free the slaves
+				write_error("Up or down invalid wall");
 			i++;
 		}
 	}
@@ -107,7 +105,7 @@ void	check_first_last_wall(t_pars *g, int n)
 		while (g->rgb[++g->l])
 		{
 			if (this_line(g->rgb[g->l]))
-				break;
+				break ;
 		}
 	}
 	else
@@ -116,7 +114,7 @@ void	check_first_last_wall(t_pars *g, int n)
 		while (g->rgb[g->l1])
 		{
 			if (this_line(g->rgb[g->l1]))
-				break;
+				break ;
 			g->l1--;
 		}
 	}
@@ -124,8 +122,8 @@ void	check_first_last_wall(t_pars *g, int n)
 
 void	len_check(t_pars *g, int i)
 {
-	if (i >= (int)ft_strlen(g->rgb[g->l - 1])
-		|| i >= (int)ft_strlen(g->rgb[g->l + 1]))
+	if (i >= (int)ft_strlen(g->rgb[g->l - 1]) || i >= (int)ft_strlen(g->rgb[g->l
+			+ 1]))
 		write_error("Map invalid middle");
 }
 
@@ -152,10 +150,8 @@ void	check_middle(t_pars *g)
 				|| g->rgb[g->l][i] == 'S')
 			{
 				len_check(g, i);
-				if (g->rgb[g->l - 1][i] == 32
-				|| g->rgb[g->l + 1][i] == 32
-				|| g->rgb[g->l][i - 1] == 32
-				|| g->rgb[g->l][i + 1] == 32)
+				if (g->rgb[g->l - 1][i] == 32 || g->rgb[g->l + 1][i] == 32
+					|| g->rgb[g->l][i - 1] == 32 || g->rgb[g->l][i + 1] == 32)
 					write_error("Map invalid middle");
 			}
 		}
@@ -180,8 +176,7 @@ void	check_map_char(char *s)
 		write_error("Invalid map");
 	while (i <= j)
 	{
-		if (s[i] == 'N' || s[i] == 'S'
-		|| s[i] == 'E' || s[i] == 'W')
+		if (s[i] == 'N' || s[i] == 'S' || s[i] == 'E' || s[i] == 'W')
 		{
 			if (d == 0)
 				d++;
@@ -206,11 +201,10 @@ void	mapars(t_pars *g)
 	{
 		g->line = get_next_line(g->fd);
 		if (!g->line)
-			break;
+			break ;
 		g->hash = gnl_strjoin(g->hash, g->line);
 		free(g->line);
 	}
-	// allocation : map + joined
 	check_map_char(g->hash);
 	g->rgb = ft_split(g->hash, '\n');
 	check_first_last_wall(g, -1);
@@ -218,7 +212,7 @@ void	mapars(t_pars *g)
 	check_middle(g);
 }
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
 	t_pars	g;
 
@@ -226,9 +220,10 @@ int main(int ac, char **av)
 		(ft_putstr_fd("Error\nNot valid ARGS\n", 2), exit(1));
 	check_ext(av[1]);
 	g_init(&g);
-	g.fd = open (av[1], O_RDWR);
+	g.fd = open(av[1], O_RDWR);
 	if (g.fd < 0)
 		write_error("Wrong map path");
+	g.mlx.mlx_ptr = mlx_init();
 	loopars(&g);
 	mapars(&g);
 	manage_window(&g);

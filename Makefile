@@ -22,7 +22,14 @@ SR =	main.c \
 			get_next_line_utils.c \
 			draw.c \
 			draw2.c \
+			draw3.c \
 			window.c \
+			help_window.c \
+			help_window2.c \
+			intersection.c \
+			mini_map.c \
+			manage_rays.c \
+			utils.c \
 		
 SRC = $(addprefix $(SR_PATH), $(SR))
 

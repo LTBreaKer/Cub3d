@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 09:25:04 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/05/06 12:30:04 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/05/30 00:25:12 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,21 @@ int	first_elem(t_pars *g)
 	return (-1);
 }
 
+void	get_img(int tx_id, t_pars *g, char *sub)
+{
+	g->mlx.tx[tx_id].img = mlx_xpm_file_to_image(g->mlx.mlx_ptr, sub,
+			&g->mlx.tx[tx_id].width, &g->mlx.tx[tx_id].height);
+	if (!g->mlx.tx[tx_id].img)
+		write_error("Texture not valid");
+	g->mlx.tx[tx_id].addr = mlx_get_data_addr(g->mlx.tx[tx_id].img,
+			&g->mlx.tx[tx_id].bpp,
+			&g->mlx.tx[tx_id].line_length,
+			&g->mlx.tx[tx_id].endian);
+}
+
 int	second_elem(t_pars *g, char *s, int n)
 {
 	char	*sub;
-	int		fd;
 	int		start;
 
 	start = 0;
@@ -48,16 +59,14 @@ int	second_elem(t_pars *g, char *s, int n)
 		start++;
 	sub = ft_substr(s, start, ft_strlen2(s) - start);
 	if (n == 0)
-		g->no = sub;
+		get_img(NO, g, sub);
 	else if (n == 1)
-		g->we = sub;
+		get_img(WE, g, sub);
 	else if (n == 2)
-		g->ea = sub;
+		get_img(EA, g, sub);
 	else if (n == 3)
-		g->so = sub;
-	fd = open(sub, O_RDWR);
-	if (fd < 0)
-		return (0);
+		get_img(SO, g, sub);
+	free(sub);
 	return (1);
 }
 
@@ -65,7 +74,7 @@ void	valid_rgb(t_pars *g)
 {
 	char	*tmp;
 	char	c;
-	int 	i;
+	int		i;
 
 	tmp = g->line;
 	while (*tmp == 32)
@@ -104,16 +113,18 @@ void	check_rgb(t_pars *g, char c)
 		i++;
 	}
 	if (c == 'F')
-		g->f = (ft_atoi(g->rgb[0]) * 65536) + (ft_atoi(g->rgb[1]) * 256) + ft_atoi(g->rgb[2]);
+		g->f = (ft_atoi(g->rgb[0]) * 65536) + (ft_atoi(g->rgb[1]) * 256)
+			+ ft_atoi(g->rgb[2]);
 	else if (c == 'C')
-		g->c = (ft_atoi(g->rgb[0]) * 65536) + (ft_atoi(g->rgb[1]) * 256) + ft_atoi(g->rgb[2]);
+		g->c = (ft_atoi(g->rgb[0]) * 65536) + (ft_atoi(g->rgb[1]) * 256)
+			+ ft_atoi(g->rgb[2]);
 	free_splited(g->rgb);
 }
 
-int	valid_line (t_pars *g)
+int	valid_line(t_pars *g)
 {
-	int		ret;
-	int		i;
+	int	ret;
+	int	i;
 
 	i = 0;
 	while (g->line[i] == 32)
