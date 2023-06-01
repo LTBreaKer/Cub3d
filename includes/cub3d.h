@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 20:16:03 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/06/01 11:35:07 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/06/01 13:52:05 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,8 +185,16 @@ int				second_elem(t_pars *g, char *s, int n);
 void			valid_rgb(t_pars *g);
 void			check_rgb(t_pars *g, char c);
 int				valid_line(t_pars *g);
+int				this_line(char *s);
 void			write_error(char *str);
 void			loopars(t_pars *g);
+void			mapars(t_pars *g);
+void			check_first_last_wall(t_pars *g, int n);
+void			check_middle_help(t_pars *g, int i, int len);
+void			check_middle(t_pars *g);
+void			check_map_char_help(char *s, int i, int *d);
+void			check_map_char(char *s);
+void			check_rgb(t_pars *g, char c);
 
 //--------------------window.c--------------------
 

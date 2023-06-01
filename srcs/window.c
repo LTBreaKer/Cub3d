@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/06 12:35:35 by aharrass          #+#    #+#             */
-/*   Updated: 2023/06/01 12:39:05 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/06/01 13:55:06 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ void	update(t_mlx *mlx)
 	if (mlx->p.angle > 2 * M_PI)
 		mlx->p.angle -= 2 * M_PI;
 	update_movement(mlx, &new_x, &new_y);
-	if (!check_update(mlx, new_x, new_y) && mlx->keys.s == RELEASED)
+	if (!check_update(mlx, new_x, new_y) && mlx->keys.s == RELEASED
+		&& mlx->keys.d == RELEASED && mlx->keys.a == RELEASED)
 		wall_slide(mlx);
 }
 

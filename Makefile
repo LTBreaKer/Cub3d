@@ -30,6 +30,8 @@ SR =	main.c \
 			mini_map.c \
 			manage_rays.c \
 			utils.c \
+			gopars2.c \
+			pars_tools.c \
 		
 SRC = $(addprefix $(SR_PATH), $(SR))
 

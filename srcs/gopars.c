@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gopars.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rel-mham <rel-mham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 09:25:04 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/05/30 00:25:12 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/05/30 17:41:17 by rel-mham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,18 @@ int	second_elem(t_pars *g, char *s, int n)
 {
 	char	*sub;
 	int		start;
+	int		end;
 
+	end = ft_strlen2(s) - 1;
 	start = 0;
 	while (s[start] == 32)
 		start++;
 	start += 2;
 	while (s[start] == 32)
 		start++;
-	sub = ft_substr(s, start, ft_strlen2(s) - start);
+	while (s[end] == 32)
+		end--;
+	sub = ft_substr(s, start, end - start + 1);
 	if (n == 0)
 		get_img(NO, g, sub);
 	else if (n == 1)
@@ -88,37 +92,14 @@ void	valid_rgb(t_pars *g)
 		write_error("More or less than 2 comma");
 	while (tmp[i] != '\n')
 	{
-		if (tmp[i] != ',' && (tmp[i] < '0' || tmp[i] > '9'))
-			write_error("Not valid RGB");
+		if (tmp[i] != ',' && tmp[i] != 32 && (tmp[i] < '0' || tmp[i] > '9'))
+			write_error("Not valid RGB 1");
 		i++;
 	}
 	g->rgb = ft_split(tmp, ',');
 	if (ft_double_strlen(g->rgb) != 3)
-		write_error("Not valid RGB");
+		write_error("Not valid RGB 2");
 	check_rgb(g, c);
-}
-
-void	check_rgb(t_pars *g, char c)
-{
-	int	i;
-	int	num;
-
-	i = 0;
-	num = 0;
-	while (g->rgb[i])
-	{
-		num = ft_atoi(g->rgb[i]);
-		if (num < 0 || num > 255)
-			write_error("Not valid RGB");
-		i++;
-	}
-	if (c == 'F')
-		g->f = (ft_atoi(g->rgb[0]) * 65536) + (ft_atoi(g->rgb[1]) * 256)
-			+ ft_atoi(g->rgb[2]);
-	else if (c == 'C')
-		g->c = (ft_atoi(g->rgb[0]) * 65536) + (ft_atoi(g->rgb[1]) * 256)
-			+ ft_atoi(g->rgb[2]);
-	free_splited(g->rgb);
 }
 
 int	valid_line(t_pars *g)
