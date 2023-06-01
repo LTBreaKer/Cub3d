@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 00:49:18 by aharrass          #+#    #+#             */
-/*   Updated: 2023/05/30 01:00:43 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/05/31 00:41:11 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	close_window(t_mlx *mlx)
 {
-	mlx_destroy_window(mlx->mlx_ptr, mlx->win_ptr);
+	mlx_destroy_window(mlx->mlx_ptr, mlx->win);
 	exit(0);
 }
 

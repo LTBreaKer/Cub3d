@@ -6,11 +6,27 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 00:54:46 by aharrass          #+#    #+#             */
-/*   Updated: 2023/05/30 01:14:15 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/06/01 11:13:31 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
+
+void	set_horiz(t_mlx *mlx, int i, double hor_dist, t_coords *hor_inter)
+{
+	mlx->rays.vertical_hit[i] = 0;
+	mlx->rays.distance[i] = hor_dist;
+	mlx->rays.wall_hit_x[i] = hor_inter[i].x;
+	mlx->rays.wall_hit_y[i] = hor_inter[i].y;
+}
+
+void	set_vert(t_mlx *mlx, int i, double ver_dist, t_coords *ver_inter)
+{
+	mlx->rays.vertical_hit[i] = 1;
+	mlx->rays.distance[i] = ver_dist;
+	mlx->rays.wall_hit_x[i] = ver_inter[i].x;
+	mlx->rays.wall_hit_y[i] = ver_inter[i].y;
+}
 
 void	cast_rays(t_mlx *mlx)
 {
@@ -33,19 +49,9 @@ void	cast_rays(t_mlx *mlx)
 			ver_dist = sqrt(pow(ver_inter[i].x - mlx->p.x, 2)
 					+ pow(ver_inter[i].y - mlx->p.y, 2));
 		if (hor_dist <= ver_dist)
-		{
-			mlx->rays.vertical_hit[i] = 0;
-			mlx->rays.distance[i] = hor_dist;
-			mlx->rays.wall_hit_x[i] = hor_inter[i].x;
-			mlx->rays.wall_hit_y[i] = hor_inter[i].y;
-		}
+			set_horiz(mlx, i, hor_dist, hor_inter);
 		else
-		{
-			mlx->rays.vertical_hit[i] = 1;
-			mlx->rays.distance[i] = ver_dist;
-			mlx->rays.wall_hit_x[i] = ver_inter[i].x;
-			mlx->rays.wall_hit_y[i] = ver_inter[i].y;
-		}
+			set_vert(mlx, i, ver_dist, ver_inter);
 		i++;
 	}
 }

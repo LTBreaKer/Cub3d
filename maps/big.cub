@@ -1,7 +1,7 @@
-NO ./TEKWALL1.xpm
-SO ./TEKWALL2.xpm
-WE ./TEKWALL4.xpm
-EA ./TEKWALL5.xpm
+NO ./textures/TEKWALL1.xpm
+SO ./textures/TEKWALL2.xpm
+WE ./textures/TEKWALL4.xpm
+EA ./textures/TEKWALL5.xpm
 F 0,15,7
 C 208,221,215
 

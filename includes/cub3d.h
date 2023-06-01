@@ -6,20 +6,20 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 20:16:03 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/05/30 01:11:13 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/06/01 11:35:07 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 # include "../libft/libft.h"
-// # include "../minilibx_opengl_20191021/mlx.h"
+# include "../minilibx_opengl_20191021/mlx.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <float.h>
 # include <limits.h>
 # include <math.h>
-# include <mlx.h>
+//# include <mlx.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -30,25 +30,33 @@
 # define WIN_HEIGHT 720
 # define TILE_SIZE 60
 # define MAP_SCALE 4
-# define W_KEY 13
-# define A_KEY 0
-# define S_KEY 1
-# define D_KEY 2
-# define ESC 53
-# define TAB_KEY 48
-# define LEFT_ARR 123
-# define RIGHT_ARR 124
 # define POINT_SIZE 10
 # define PRESSED 1
 # define RELEASED 0
 # define LEFT -1
 # define RIGHT 1
-# define RAYS ((1280 / 1))
-# define FOV (60 * (M_PI / 180))
-# define NO 0
-# define SO 1
-# define EA 2
-# define WE 3
+# define RAYS WIN_WIDTH
+# define FOV (1.0471975512)
+
+enum
+{
+	NO,
+	SO,
+	EA,
+	WE,
+};
+
+enum			e_keys
+{
+	W_KEY = 13,
+	A_KEY = 0,
+	S_KEY = 1,
+	D_KEY = 2,
+	ESC = 53,
+	TAB_KEY = 48,
+	LEFT_ARR = 123,
+	RIGHT_ARR = 124,
+};
 
 typedef struct s_rays
 {
@@ -136,7 +144,7 @@ typedef struct s_mini_map
 typedef struct s_mlx
 {
 	void		*mlx_ptr;
-	void		*win_ptr;
+	void		*win;
 	char		*addr;
 	int			bits_per_pixel;
 	int			line_length;
@@ -214,7 +222,10 @@ int				wall_check_2(double new_x, double new_y, char **map);
 void			map_hightnwidth(t_map *map);
 int				get_map_color(t_map *map, int x, int y);
 void			get_player_ang(t_p *p, char **map);
-int				mouse_hook(int x, int y, t_mlx *mlx);
+int				mouse_hook12(int x, int y, t_mlx *mlx);
 void			crop_map(t_mlx *mlx);
 void			walls(t_mlx *mlx);
+void			wall_slide(t_mlx *mlx);
+int				check_update(t_mlx *mlx, double new_x, double new_y);
+int				get_color(t_mlx *mlx, int x, int y, int tx_id);
 #endif
